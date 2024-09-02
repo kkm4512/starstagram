@@ -1,6 +1,5 @@
 package com.sparta.starstagram.entity;
 
-import com.sparta.starstagram.dto.UserRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,12 +15,12 @@ public class User extends TimeStamp {
     private Long id;
     private String email;
     private String password;
-    private String ninkname;
+    private String nickname;
 
     public User(String email, String nickname, String encodedPassword) {
         this.email = email;
         this.password = encodedPassword;
-        this.ninkname = nickname;
+        this.nickname = nickname;
     }
 
     public void setPassword(String encode) {

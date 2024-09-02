@@ -14,14 +14,14 @@ public class Board extends TimeStamp {
     private String title;
     private String detail;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-//
-//    // 연관관계 설정
-//    public void addUser(User user){
-//        this.user = user;
-//    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // 연관관계 설정
+    public void addUser(User user){
+        this.user = user;
+    }
 
     // 게시글 수정
     public void updateBoard(RequestBoardDto reqDto){
