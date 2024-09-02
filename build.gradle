@@ -38,8 +38,7 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 // Password encryption(BCrypt)
-    implementation 'org.springframework.security:spring-security-crypto'
-}
+    implementation 'org.springframework.boot:spring-boot-starter-security'}
 
 tasks.named('test') {
     useJUnitPlatform()
