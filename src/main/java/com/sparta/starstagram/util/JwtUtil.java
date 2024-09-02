@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -68,31 +69,42 @@ public class JwtUtil {
     }
 
     /**
-     * JWT Cookie에 저장
+     * JWT 헤더에 저장
      */
     public void addJwtToCookie(String token, HttpServletResponse res) {
         try {
             token = URLEncoder.encode(token, "utf-8").replace("\\+", "%20");
 
-            Cookie cookie = new Cookie(AUTHORIZATION_KEY, token);
-            cookie.setPath("/");
+            res.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + token);
 
-            res.addCookie(cookie);
+            //Cookie cookie = new Cookie(AUTHORIZATION_KEY, token);
+            //cookie.setPath("/");
+
+            //res.addHeader("Auth", token);
         } catch (UnsupportedEncodingException e) {
             logger.severe(e.getMessage());
         }
     }
 
     /**
-     * Cookie에 들어있던 JWT 토큰을 Substring
+     * 헤더에서 JWT 토큰 추출
      */
-    public String substringToken(String tokenValue) {
-        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            return tokenValue.substring(7);
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7); //Bearer 부분을 제외한 JWT 반환
         }
-        logger.severe("토큰을 찾을 수 없습니다.");
-        throw new NullPointerException("토큰을 찾을 수 없습니다.");
+        return null; //유효한 JWT가 없으면 null을 반환
+
     }
+
+    /**
+     * JWT에서 사용자 정보 가져오기
+     */
+    public Claims getUserInfoFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
 
     /**
      * 토큰 검증
@@ -112,13 +124,6 @@ public class JwtUtil {
         }
 
         return false;
-    }
-
-    /**
-     * JWT에서 사용자 정보 가져오기
-     */
-    public Claims getUserInfoFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
 }
