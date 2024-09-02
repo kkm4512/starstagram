@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Friend{
+public class Friend {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +19,9 @@ public class Friend{
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Friend(Long id, String friendName) {
+    public Friend(Long id, String friendName, User user) {
         this.id = id;
         this.friendName = friendName;
+        this.user = user;
     }
 }
