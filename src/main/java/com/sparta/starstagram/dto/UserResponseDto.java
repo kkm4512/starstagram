@@ -12,7 +12,7 @@ public class UserResponseDto {
 
     public UserResponseDto(User user) {
         this.id = user.getId();
-        this.nickname = user.getNickname();
+        this.nickname = user.getNinkname();
         this.email = user.getEmail();
     }
 }

@@ -1,5 +1,6 @@
 package com.sparta.starstagram.entity;
 
+import com.sparta.starstagram.model.board.RequestBoardDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,19 +8,18 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Getter
 @NoArgsConstructor
-public class User extends TimeStamp {
+@Getter
+@Entity
+public class Board extends TimeStamp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String email;
-    private String password;
-    private String ninkname;
+    private long id;
+    private String title;
+    private String detail;
 
-    public User(String email, String nickname, String encodedPassword) {
-        this.email = email;
-        this.password = encodedPassword;
-        this.ninkname = nickname;
+    // Dto -> Entity
+    public Board(RequestBoardDto reqDto) {
+        this.title = reqDto.getTitle();
+        this.detail = reqDto.getDetail();
     }
 }
