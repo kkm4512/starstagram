@@ -12,4 +12,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @author tiyu
      */
     User findByEmail(String email);
+
+    /**
+     *
+     *
+     *
+     */
+    User findByUsername(String username);
 }

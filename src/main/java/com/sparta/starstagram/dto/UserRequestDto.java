@@ -4,5 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class UserRequestDto {
-    private String password;
+    private String nickname;
+    private String email;
+    private String currentPassword;
+    private String newPassword;
 }
