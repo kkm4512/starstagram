@@ -13,7 +13,6 @@ import com.sparta.starstagram.util.UtilFind;
 import com.sparta.starstagram.util.UtilResponse;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,9 @@ public class BoardService {
      * @return 성공하였다는 응답 반환
      */
     @Transactional
-    public ResponseEntity<BaseResponseDto> createBoard(RequestBoardDto reqDto) {
-        Claims info = jwtUtil.resolveToken()
+    public ResponseEntity<BaseResponseDto> createBoard(RequestBoardDto reqDto, HttpServletRequest req) {
+        String jwt = jwtUtil.resolveToken(req);
+        Claims info = jwtUtil.getUserInfoFromToken(jwt);
         String nickname = info.getId();
         User user = utilFind.userFindByNickname(nickname);
         Board board = new Board(reqDto);
@@ -74,7 +74,7 @@ public class BoardService {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      */
     @Transactional
-    public ResponseEntity<BaseResponseDto> deleteBoard(Long id) {
+    public ResponseEntity<BaseResponseDto> deleteBoard(Long id, HttpServletRequest req) {
         Board board = utilFind.boardFindById(id);
         boardRepository.delete(board);
         return UtilResponse.getResponseEntity(BaseResponseEnum.BOARD_DELETE_SUCCESS);

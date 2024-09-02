@@ -35,7 +35,7 @@ public class FriendService {
         return new FriendSaveResponseDto(
                 saveFriend.getId(),
                 saveFriend.getFriendName(),
-                new UserDto(user.getId(), user.getEmail(), user.getNinkname()));
+                new UserDto(user.getId(), user.getEmail(), user.getNickname()));
     }
 
     /**

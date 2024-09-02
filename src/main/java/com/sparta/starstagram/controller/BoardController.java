@@ -22,8 +22,8 @@ public class BoardController {
      * @author 김경민
      */
     @PostMapping
-    public ResponseEntity<BaseResponseDto> createBoard(@RequestBody RequestBoardDto reqDto) {
-        return boardService.createBoard(reqDto);
+    public ResponseEntity<BaseResponseDto> createBoard(@RequestBody RequestBoardDto reqDto, HttpServletRequest req) {
+        return boardService.createBoard(reqDto,req);
     }
 
     /**
@@ -44,8 +44,8 @@ public class BoardController {
      * @author 김경민
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseDto> deleteBoard(@PathVariable Long id) {
-        return boardService.deleteBoard(id);
+    public ResponseEntity<BaseResponseDto> deleteBoard(@PathVariable Long id, HttpServletRequest req) {
+        return boardService.deleteBoard(id,req);
     }
 
     /**
