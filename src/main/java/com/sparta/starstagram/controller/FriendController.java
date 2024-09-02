@@ -23,8 +23,8 @@ public class FriendController {
      * @author 황윤서
      */
     @PostMapping("/api/otherUsers/{friendId}")
-    public ResponseEntity<FriendSaveResponseDto> saveFriends(@RequestBody FriendSaveRequestDto friendSaveRequestDto) {
-        return ResponseEntity.ok(friendService.saveFriends(friendSaveRequestDto));
+    public ResponseEntity<FriendSaveResponseDto> saveFriend(@RequestBody FriendSaveRequestDto friendSaveRequestDto) {
+        return ResponseEntity.ok(friendService.saveFriend(friendSaveRequestDto));
     }
 
     /**
