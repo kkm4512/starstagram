@@ -71,16 +71,11 @@ public class JwtUtil {
     /**
      * JWT 헤더에 저장
      */
-    public void addJwtToCookie(String token, HttpServletResponse res) {
+    public void addJwtToHeader(String token, HttpServletResponse res) {
         try {
             token = URLEncoder.encode(token, "utf-8").replace("\\+", "%20");
 
             res.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + token);
-
-            //Cookie cookie = new Cookie(AUTHORIZATION_KEY, token);
-            //cookie.setPath("/");
-
-            //res.addHeader("Auth", token);
         } catch (UnsupportedEncodingException e) {
             logger.severe(e.getMessage());
         }
@@ -104,7 +99,6 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
-
 
     /**
      * 토큰 검증
