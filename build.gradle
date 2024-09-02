@@ -33,14 +33,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     //MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
-    // Spring Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
 // JWT
     compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-// H2 Datebase
-    runtimeOnly 'com.h2database:h2'
 // Password encryption(BCrypt)
     implementation 'org.springframework.security:spring-security-crypto'
 }
