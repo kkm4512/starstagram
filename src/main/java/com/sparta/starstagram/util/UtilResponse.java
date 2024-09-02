@@ -14,7 +14,7 @@ public class UtilResponse {
     public static ResponseEntity<BaseResponseDto> getResponseEntity(BaseResponseEnum baseResponseEnum) {
 
         // 상태
-        int status =  baseResponseEnum.getStatus();
+        int status =  baseResponseEnum.getStatus().value();
 
         // 헤더
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
