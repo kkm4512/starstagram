@@ -11,12 +11,13 @@ import java.nio.charset.StandardCharsets;
 
 @Component
 public class UtilResponse {
-    private static final HttpHeaders headers = new HttpHeaders();
+
     // ResponseEntity 형식으로 반환시켜주는 메서드
     public static ResponseEntity<BaseResponseDto> getResponseEntity(BaseResponseEnum baseResponseEnum) {
+        final HttpHeaders headers = new HttpHeaders();
 
         // 상태
-        int status =  baseResponseEnum.getStatus().value();
+        int status =  baseResponseEnum.getStatus();
 
         // 헤더
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));

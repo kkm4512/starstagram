@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UtilFind {
     private final UserRepository userRepository;
-    private final PostRepository boardRepository;
+    private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
 
     /**
@@ -45,7 +45,7 @@ public class UtilFind {
     /**
      * 이름으로 유저 찾는 메서드
      *
-     * @param username 유저를 찾을 이름
+     * @param email 유저를 찾을 이메일
      * @return 조회돤 유저 반호
      * @throws HandleNotFoundException 사용자가 없을시 발생되는 예외
      * @author 김경민
@@ -75,7 +75,7 @@ public class UtilFind {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      * @author 김경민
      */
-    public Post boardFindById(Long id){
-        return boardRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.USER_NOT_FOUND));
+    public Post postFindById(Long id){
+        return postRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.BOARD_NOT_FOUND));
     }
 }

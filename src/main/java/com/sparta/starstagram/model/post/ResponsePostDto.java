@@ -5,13 +5,13 @@ import com.sparta.starstagram.model.TimeStampDto;
 import lombok.Getter;
 
 @Getter
-public class ResponseBoardDto extends TimeStampDto {
+public class ResponsePostDto extends TimeStampDto {
     private long id;
     private String title;
     private String detail;
 
     // Entity -> Dto
-    public ResponseBoardDto(Post board) {
+    public ResponsePostDto(Post board) {
         super(board.getCreatedAt(), board.getUpdatedAt());
         this.id = board.getId();
         this.title = board.getTitle();
