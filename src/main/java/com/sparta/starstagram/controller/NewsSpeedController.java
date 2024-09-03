@@ -1,6 +1,6 @@
 package com.sparta.starstagram.controller;
 
-import com.sparta.starstagram.model.board.ResponseBoardDto;
+import com.sparta.starstagram.model.post.ResponseBoardDto;
 import com.sparta.starstagram.service.NewsSpeedService;
 import com.sparta.starstagram.util.UtilFind;
 import jakarta.servlet.http.HttpServletRequest;

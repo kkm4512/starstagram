@@ -22,5 +22,11 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
     }
 
+    @PostMapping("api/user/signup")
+    public void registerUser(@RequestParam String email,
+                             @RequestParam String password,
+                             @RequestParam String username) {
+        userService.registerUser(email, password, username);
+    }
 
 }

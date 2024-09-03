@@ -5,7 +5,6 @@ import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.exception.HandleNotFoundException;
 import com.sparta.starstagram.model.UserRequestLoginDto;
 import com.sparta.starstagram.util.JwtUtil;
-import com.sparta.starstagram.util.UtilFind;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,17 +20,16 @@ import java.io.IOException;
 @Slf4j(topic = "JwtAuthenticationFilter")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
-    private final UtilFind utilFind;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil ,UtilFind utilFind) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
-        this.utilFind = utilFind;
-        setFilterProcessesUrl("/api/auth/login");
+        setFilterProcessesUrl("/api/user/login");
     }
 
     //사용자 인증 시도 메서드
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+        log.info("req.getRequestURI() : {}", req.getRequestURI());
         log.info("로그인 시도");
         try {;
             UserRequestLoginDto reqDto = new ObjectMapper().readValue(req.getInputStream(), UserRequestLoginDto.class);
