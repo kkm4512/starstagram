@@ -1,7 +1,9 @@
 package com.sparta.starstagram.controller;
 
 import com.sparta.starstagram.model.board.ResponseBoardDto;
-import com.sparta.starstagram.service.PageNavigateService;
+import com.sparta.starstagram.service.NewsSpeedService;
+import com.sparta.starstagram.util.UtilFind;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class PageNavigateController {
-    private final PageNavigateService pageNavigateService;
+public class NewsSpeedController {
+    private final NewsSpeedService pageNavigateService;
+
 
     /**
      * 특정 페이지의, 특정 갯수만큼 게시글 찾을 수 있는 API
@@ -21,7 +24,8 @@ public class PageNavigateController {
      * @author 김경민
      */
     @GetMapping("/query")
-    public Page<ResponseBoardDto> getBoardPage(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    public Page<ResponseBoardDto> getBoardPage(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest req) {
+        User user = utilFind
         return pageNavigateService.getBoardPage(page-1,size);
     }
 }

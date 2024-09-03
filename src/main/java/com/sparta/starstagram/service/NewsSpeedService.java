@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PageNavigateService {
+public class NewsSpeedService {
     private final PageNavigateRepository pageNavigateRepository;
 
     /**
@@ -22,7 +22,7 @@ public class PageNavigateService {
      * @param size 가져올 게시글 갯수 (디폴트는 10페이지)
      * @return Page<ResponseBoardDto> N page, N size의 board들을 반환
      *
-     * TODO 자신의 게시글들과, Friend에 있는 id의 게시글들만 가져와야함
+     * TODO Friend에 있는 id의 게시글들만 가져와야함
      */
     public Page<ResponseBoardDto> getBoardPage(int page, int size) {
         Sort.Direction dir = Sort.Direction.DESC;

@@ -1,6 +1,6 @@
 package com.sparta.starstagram.service;
 
-import com.sparta.starstagram.dto.UserDto;
+import com.sparta.starstagram.model.UserDto;
 import com.sparta.starstagram.entity.Friend;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.model.FriendSaveRequestDto;

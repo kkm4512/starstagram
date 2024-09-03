@@ -1,4 +1,4 @@
-package com.sparta.starstagram.dto;
+package com.sparta.starstagram.model;
 
 import lombok.Getter;
 

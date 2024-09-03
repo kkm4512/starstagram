@@ -1,7 +1,7 @@
 package com.sparta.starstagram.service;
 
-import com.sparta.starstagram.dto.UserRequestDto;
-import com.sparta.starstagram.dto.UserResponseDto;
+import com.sparta.starstagram.model.UserRequestDto;
+import com.sparta.starstagram.model.UserResponseDto;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.JwtUtil;
