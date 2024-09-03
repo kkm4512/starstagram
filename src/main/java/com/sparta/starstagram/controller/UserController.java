@@ -1,6 +1,6 @@
 package com.sparta.starstagram.controller;
 
-import com.sparta.starstagram.model.UserRequestDto;
+import com.sparta.starstagram.model.UserNewPasswordRequestDto;
 import com.sparta.starstagram.model.UserResponseDto;
 import com.sparta.starstagram.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class UserController {
     }
 
     @PutMapping("/api/user/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserNewPasswordRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
     }
 

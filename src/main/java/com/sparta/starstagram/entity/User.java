@@ -26,6 +26,7 @@ public class User extends TimeStamp {
         this.username = username;
     }
 
+
     // 암호화된 패스워드를 저장
     public void setPassword(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);

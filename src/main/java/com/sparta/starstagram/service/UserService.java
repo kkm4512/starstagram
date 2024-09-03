@@ -1,6 +1,6 @@
 package com.sparta.starstagram.service;
 
-import com.sparta.starstagram.model.UserRequestDto;
+import com.sparta.starstagram.model.UserNewPasswordRequestDto;
 import com.sparta.starstagram.model.UserResponseDto;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.repository.UserRepository;
@@ -35,15 +35,17 @@ public class UserService {
     }
 
 
-    @Transactional
+
+    @Transactional(readOnly = true)
     public UserResponseDto getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
         return new UserResponseDto(user);
     }
 
 
+
     @Transactional
-    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
+    public UserResponseDto updateUser(Long id, UserNewPasswordRequestDto userRequestDto) {
         // ID를 통해 사용자 정보 조회
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
