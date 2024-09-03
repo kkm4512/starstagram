@@ -4,6 +4,7 @@ import com.sparta.starstagram.model.BaseResponseDto;
 import com.sparta.starstagram.model.board.RequestBoardDto;
 import com.sparta.starstagram.model.board.ResponseBoardDto;
 import com.sparta.starstagram.service.BoardService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,8 @@ public class BoardController {
      * @author 김경민
      */
     @PostMapping
-    public ResponseEntity<BaseResponseDto> createBoard(@RequestBody RequestBoardDto reqDto) {
-        return boardService.createBoard(reqDto);
+    public ResponseEntity<BaseResponseDto> createBoard(@RequestBody RequestBoardDto reqDto, HttpServletRequest req) {
+        return boardService.createBoard(reqDto,req);
     }
 
     /**
@@ -32,8 +33,8 @@ public class BoardController {
      * @author 김경민
      */
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponseDto> updateBoard(@PathVariable Long id, @RequestBody RequestBoardDto reqDto) {
-        return boardService.updateBoard(id,reqDto);
+    public ResponseEntity<BaseResponseDto> updateBoard(@PathVariable Long id, @RequestBody RequestBoardDto reqDto, HttpServletRequest req) {
+        return boardService.updateBoard(id,reqDto,req);
     }
 
     /**
@@ -43,8 +44,8 @@ public class BoardController {
      * @author 김경민
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseDto> deleteBoard(@PathVariable Long id) {
-        return boardService.deleteBoard(id);
+    public ResponseEntity<BaseResponseDto> deleteBoard(@PathVariable Long id, HttpServletRequest req) {
+        return boardService.deleteBoard(id,req);
     }
 
     /**
@@ -56,5 +57,4 @@ public class BoardController {
     public ResponseBoardDto getBoard(@PathVariable Long id) {
         return boardService.getBoard(id);
     }
-
 }

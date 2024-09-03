@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Entity
 @Getter
-@Service
 @NoArgsConstructor
 public class User extends TimeStamp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,13 +2,17 @@ package com.sparta.starstagram.service;
 
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.Board;
+import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.HandleNotFoundException;
 import com.sparta.starstagram.model.BaseResponseDto;
 import com.sparta.starstagram.model.board.RequestBoardDto;
 import com.sparta.starstagram.model.board.ResponseBoardDto;
 import com.sparta.starstagram.repository.BoardRepository;
+import com.sparta.starstagram.util.JwtUtil;
 import com.sparta.starstagram.util.UtilFind;
 import com.sparta.starstagram.util.UtilResponse;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UtilFind utilFind;
-//    private final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     /**
      * 특정 사용자의 게시글 저장 로직
@@ -28,14 +32,16 @@ public class BoardService {
      * @return 성공하였다는 응답 반환
      */
     @Transactional
-    public ResponseEntity<BaseResponseDto> createBoard(RequestBoardDto reqDto) {
-//        String jwt = jwtUtil.getReqesutFromHeader();
-//        User user = utilFind.userFindById(userId);
+    public ResponseEntity<BaseResponseDto> createBoard(RequestBoardDto reqDto, HttpServletRequest req) {
+        String jwt = jwtUtil.resolveToken(req);
+        Claims info = jwtUtil.getUserInfoFromToken(jwt);
+        String nickname = info.getId();
+        User user = utilFind.userFindByNickname(nickname);
         Board board = new Board(reqDto);
-        // 연관관계 설정
-//        board.addUser(user);
+//         연관관계 설정
+        board.addUser(user);
         boardRepository.save(board);
-        return UtilResponse.getResponseEntity(BaseResponseEnum.BOARD_SAVE_SUCCESS);
+        return UtilResponse.getResponseEntity(BaseResponseEnum.BOARD_UPDATE_SUCCESS);
     }
 
     /**
@@ -47,8 +53,15 @@ public class BoardService {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      */
     @Transactional
-    public ResponseEntity<BaseResponseDto> updateBoard(Long id, RequestBoardDto reqDto) {
+    public ResponseEntity<BaseResponseDto> updateBoard(Long id, RequestBoardDto reqDto, HttpServletRequest req) {
+        String jwt = jwtUtil.resolveToken(req);
+        Claims info = jwtUtil.getUserInfoFromToken(jwt);
+        String nickname = info.getId();
+        User user = utilFind.userFindByNickname(nickname);
         Board board = utilFind.boardFindById(id);
+        System.out.println(user.getNickname());
+        System.out.println(board.getUser().getNickname());
+        if (user.getId().equals(board.getUser().getId())) {}
         board.updateBoard(reqDto);
         return UtilResponse.getResponseEntity(BaseResponseEnum.BOARD_UPDATE_SUCCESS);
     }
@@ -61,7 +74,7 @@ public class BoardService {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      */
     @Transactional
-    public ResponseEntity<BaseResponseDto> deleteBoard(Long id) {
+    public ResponseEntity<BaseResponseDto> deleteBoard(Long id, HttpServletRequest req) {
         Board board = utilFind.boardFindById(id);
         boardRepository.delete(board);
         return UtilResponse.getResponseEntity(BaseResponseEnum.BOARD_DELETE_SUCCESS);
