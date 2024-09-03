@@ -4,10 +4,11 @@ import com.sparta.starstagram.constans.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -17,7 +18,9 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.util.StringUtils;
 
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Component
@@ -58,14 +61,13 @@ public class JwtUtil {
     public String createToken(String username, UserRoleEnum role) {
         Date date = new Date();
 
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setSubject(username) //사용자 식별자 값(ID)
-                        .claim(AUTHORIZATION_KEY, role) //사용자 권한
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) //만료 시간
-                        .setIssuedAt(date) //발급일
-                        .signWith(key, signatureAlgorithm) //암호화 알고리즘
-                        .compact();
+        return BEARER_PREFIX + Jwts.builder()
+                .setSubject(username)
+                .claim(AUTHORIZATION_KEY, role.getAuthority())
+                .setExpiration(new Date(date.getTime() + TOKEN_TIME))
+                .setIssuedAt(date)
+                .signWith(key)
+                .compact();
     }
 
     /**
@@ -86,11 +88,10 @@ public class JwtUtil {
      */
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7); //Bearer 부분을 제외한 JWT 반환
+        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
         }
-        return null; //유효한 JWT가 없으면 null을 반환
-
+        return null;
     }
 
     /**
@@ -118,6 +119,11 @@ public class JwtUtil {
         }
 
         return false;
+    }
+
+    public Collection<? extends GrantedAuthority> getUserAuthorityFromToken(String token) {
+        // 여기에 권한 추출 로직을 구현합니다. (예: ROLE_USER 등)
+        return List.of(new SimpleGrantedAuthority((String) getUserInfoFromToken(token).get(AUTHORIZATION_KEY)));
     }
 
 }
