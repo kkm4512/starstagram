@@ -1,7 +1,7 @@
 package com.sparta.starstagram.service;
 
 import com.sparta.starstagram.entity.Post;
-import com.sparta.starstagram.model.post.ResponseBoardDto;
+import com.sparta.starstagram.model.post.ResponsePostDto;
 import com.sparta.starstagram.repository.PageNavigateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,11 +24,11 @@ public class NewsSpeedService {
      *
      * TODO Friend에 있는 id의 게시글들만 가져와야함
      */
-    public Page<ResponseBoardDto> getBoardPage(int page, int size) {
+    public Page<ResponsePostDto> getBoardPage(int page, int size) {
         Sort.Direction dir = Sort.Direction.DESC;
         Sort sort = Sort.by(dir,"createdAt");
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Post> boardList = pageNavigateRepository.findAll(pageable);
-        return boardList.map(ResponseBoardDto::new);
+        return boardList.map(ResponsePostDto::new);
     }
 }

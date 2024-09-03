@@ -1,6 +1,6 @@
 package com.sparta.starstagram.entity;
 
-import com.sparta.starstagram.model.post.RequestBoardDto;
+import com.sparta.starstagram.model.post.RequestPostDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,13 +24,13 @@ public class Post extends TimeStamp {
     }
 
     // 게시글 수정
-    public void updateBoard(RequestBoardDto reqDto){
+    public void updateBoard(RequestPostDto reqDto){
         this.title = reqDto.getTitle();
         this.detail = reqDto.getDetail();
     }
 
     // Dto -> Entity
-    public Post(RequestBoardDto reqDto) {
+    public Post(RequestPostDto reqDto) {
         this.title = reqDto.getTitle();
         this.detail = reqDto.getDetail();
     }

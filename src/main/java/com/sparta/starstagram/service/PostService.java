@@ -4,10 +4,9 @@ import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.Post;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.HandleNotFoundException;
-import com.sparta.starstagram.model.post.RequestBoardDto;
-import com.sparta.starstagram.model.post.ResponseBoardDto;
+import com.sparta.starstagram.model.post.RequestPostDto;
+import com.sparta.starstagram.model.post.ResponsePostDto;
 import com.sparta.starstagram.repository.PostRepository;
-import com.sparta.starstagram.util.JwtUtil;
 import com.sparta.starstagram.util.UtilFind;
 import com.sparta.starstagram.util.UtilValidator;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PostService {
-    private final PostRepository boardRepository;
+    private final PostRepository postRepository;
     private final UtilFind utilFind;
-    private final JwtUtil jwtUtil;
 
     /**
      * 특정 사용자의 게시글 저장 로직
@@ -28,11 +26,10 @@ public class PostService {
      * @return 성공하였다는 응답 반환
      */
     @Transactional
-    public BaseResponseEnum createBoard(RequestBoardDto reqDto, User loginUser) {
-        Post board = new Post(reqDto);
-        // 연관관계 설정
-        board.addUser(loginUser);
-        boardRepository.save(board);
+    public BaseResponseEnum createPost(RequestPostDto reqDto, User loginUser) {
+        Post post = new Post(reqDto);
+        post.addUser(loginUser); // 연관관계 설정
+        postRepository.save(post);
         return BaseResponseEnum.BOARD_SAVE_SUCCESS;
     }
 
@@ -45,10 +42,10 @@ public class PostService {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      */
     @Transactional
-    public BaseResponseEnum updateBoard(Long id, RequestBoardDto reqDto, User loginUser) {
-        Post board = utilFind.boardFindById(id);
-        UtilValidator.isSameUser(loginUser,board.getUser());
-        board.updateBoard(reqDto);
+    public BaseResponseEnum updatePost(Long id, RequestPostDto reqDto, User loginUser) {
+        Post post = utilFind.postFindById(id);
+        UtilValidator.isSameUser(loginUser,post.getUser());
+        post.updateBoard(reqDto);
         return BaseResponseEnum.BOARD_UPDATE_SUCCESS;
     }
 
@@ -60,10 +57,10 @@ public class PostService {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      */
     @Transactional
-    public BaseResponseEnum deleteBoard(Long id, User loginUser) {
-        Post board = utilFind.boardFindById(id);
-        UtilValidator.isSameUser(loginUser,board.getUser());
-        boardRepository.delete(board);
+    public BaseResponseEnum deletePost(Long id, User loginUser) {
+        Post post = utilFind.postFindById(id);
+        UtilValidator.isSameUser(loginUser,post.getUser());
+        postRepository.delete(post);
         return BaseResponseEnum.BOARD_DELETE_SUCCESS;
     }
 
@@ -75,8 +72,8 @@ public class PostService {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      */
     @Transactional(readOnly = true)
-    public ResponseBoardDto getBoard(Long id) {
-        Post board = utilFind.boardFindById(id);
-        return new ResponseBoardDto(board);
+    public ResponsePostDto getPost(Long id) {
+        Post board = utilFind.postFindById(id);
+        return new ResponsePostDto(board);
     }
 }

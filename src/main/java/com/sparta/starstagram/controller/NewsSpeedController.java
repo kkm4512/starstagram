@@ -1,6 +1,6 @@
 package com.sparta.starstagram.controller;
 
-import com.sparta.starstagram.model.post.ResponseBoardDto;
+import com.sparta.starstagram.model.post.ResponsePostDto;
 import com.sparta.starstagram.service.NewsSpeedService;
 import com.sparta.starstagram.util.UtilFind;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class NewsSpeedController {
      * @author 김경민
      */
     @GetMapping("/query")
-    public Page<ResponseBoardDto> getBoardPage(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest req) {
+    public Page<ResponsePostDto> getBoardPage(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest req) {
         return pageNavigateService.getBoardPage(page-1,size);
     }
 }
