@@ -1,10 +1,10 @@
 package com.sparta.starstagram.util;
 
 import com.sparta.starstagram.constans.BaseResponseEnum;
-import com.sparta.starstagram.entity.Board;
+import com.sparta.starstagram.entity.Post;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.HandleNotFoundException;
-import com.sparta.starstagram.repository.BoardRepository;
+import com.sparta.starstagram.repository.PostRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UtilFind {
     private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
+    private final PostRepository boardRepository;
     private final JwtUtil jwtUtil;
 
     /**
@@ -75,7 +75,7 @@ public class UtilFind {
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
      * @author 김경민
      */
-    public Board boardFindById(Long id){
+    public Post boardFindById(Long id){
         return boardRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.USER_NOT_FOUND));
     }
 }

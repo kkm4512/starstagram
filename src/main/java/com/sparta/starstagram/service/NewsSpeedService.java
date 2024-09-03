@@ -1,7 +1,7 @@
 package com.sparta.starstagram.service;
 
-import com.sparta.starstagram.entity.Board;
-import com.sparta.starstagram.model.board.ResponseBoardDto;
+import com.sparta.starstagram.entity.Post;
+import com.sparta.starstagram.model.post.ResponseBoardDto;
 import com.sparta.starstagram.repository.PageNavigateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class NewsSpeedService {
         Sort.Direction dir = Sort.Direction.DESC;
         Sort sort = Sort.by(dir,"createdAt");
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<Board> boardList = pageNavigateRepository.findAll(pageable);
+        Page<Post> boardList = pageNavigateRepository.findAll(pageable);
         return boardList.map(ResponseBoardDto::new);
     }
 }

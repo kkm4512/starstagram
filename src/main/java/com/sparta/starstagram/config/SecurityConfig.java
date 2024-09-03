@@ -4,8 +4,6 @@ import com.sparta.starstagram.security.JwtAuthenticationFilter;
 import com.sparta.starstagram.security.JwtAuthorizationFilter;
 import com.sparta.starstagram.security.UserDetailsServiceImpl;
 import com.sparta.starstagram.util.JwtUtil;
-import com.sparta.starstagram.util.UtilFind;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
-    private final UtilFind utilFind;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -34,9 +31,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public SecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration,UtilFind utilFind) {
+    public SecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration) {
         this.jwtUtil = jwtUtil;
-        this.utilFind = utilFind;
         this.userDetailsService = userDetailsService;
         this.authenticationConfiguration = authenticationConfiguration;
     }
@@ -48,7 +44,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil,utilFind);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
@@ -71,19 +67,15 @@ public class SecurityConfig {
         // 요청 처리
         http.authorizeHttpRequests(authReq ->
                 authReq
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //resource 접근 허용
-                        .requestMatchers("/api/auth/**").permitAll() // /api/user 로시작하는 요청 모두 접근 허용 (인증 x)
+                        .requestMatchers("/api/user/**").permitAll() // /api/user 로시작하는 요청 모두 접근 허용 (인증 x)
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 처리
-        );
-
-        http.formLogin(formLogin ->
-                formLogin
-                        .loginPage("/api/auth/login").permitAll()
         );
 
         //필터관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+
 
         return http.build();
     };

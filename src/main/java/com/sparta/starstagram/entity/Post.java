@@ -1,6 +1,6 @@
 package com.sparta.starstagram.entity;
 
-import com.sparta.starstagram.model.board.RequestBoardDto;
+import com.sparta.starstagram.model.post.RequestBoardDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Board extends TimeStamp {
+public class Post extends TimeStamp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
@@ -30,7 +30,7 @@ public class Board extends TimeStamp {
     }
 
     // Dto -> Entity
-    public Board(RequestBoardDto reqDto) {
+    public Post(RequestBoardDto reqDto) {
         this.title = reqDto.getTitle();
         this.detail = reqDto.getDetail();
     }

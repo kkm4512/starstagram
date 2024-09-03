@@ -1,6 +1,6 @@
-package com.sparta.starstagram.model.board;
+package com.sparta.starstagram.model.post;
 
-import com.sparta.starstagram.entity.Board;
+import com.sparta.starstagram.entity.Post;
 import com.sparta.starstagram.model.TimeStampDto;
 import lombok.Getter;
 
@@ -11,7 +11,7 @@ public class ResponseBoardDto extends TimeStampDto {
     private String detail;
 
     // Entity -> Dto
-    public ResponseBoardDto(Board board) {
+    public ResponseBoardDto(Post board) {
         super(board.getCreatedAt(), board.getUpdatedAt());
         this.id = board.getId();
         this.title = board.getTitle();

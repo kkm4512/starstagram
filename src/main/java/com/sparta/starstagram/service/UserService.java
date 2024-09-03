@@ -21,7 +21,7 @@ public class UserService {
 
     public void registerUser(String email, String password, String username) {
         // 이메일 중복 확인
-        if (userRepository.findByEmail(email) != null) {
+        if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
 

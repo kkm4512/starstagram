@@ -1,4 +1,4 @@
-package com.sparta.starstagram.model.board;
+package com.sparta.starstagram.model.post;
 
 import lombok.Getter;
 
