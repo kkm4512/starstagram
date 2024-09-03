@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Entity
 @Getter
@@ -15,16 +14,16 @@ public class User extends TimeStamp {
     private Long id;
     private String email;
     private String password;
-    private String nickname;
+    private String username;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRoleEnum role = UserRoleEnum.USER;
 
-    public User(String email, String nickname, String encodedPassword) {
+    public User(String email, String username, String encodedPassword) {
         this.email = email;
         this.password = encodedPassword;
-        this.nickname = nickname;
+        this.username = username;
     }
 
     // 암호화된 패스워드를 저장
@@ -36,7 +35,7 @@ public class User extends TimeStamp {
         this.email = email;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

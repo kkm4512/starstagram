@@ -19,7 +19,7 @@ public class UserService {
     private JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(String email, String password, String nickname) {
+    public void registerUser(String email, String password, String username) {
         // 이메일 중복 확인
         if (userRepository.findByEmail(email) != null) {
             throw new RuntimeException("Email already exists");
@@ -29,7 +29,7 @@ public class UserService {
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setPassword(password);
-        newUser.setNickname(nickname);
+        newUser.setUsername(username);
 
         userRepository.save(newUser);
     }
@@ -74,5 +74,6 @@ public class UserService {
                 password.matches(".*[0-9].*") &&
                 password.matches(".*[!@#$%^&*()].*");
     }
+
 
 }

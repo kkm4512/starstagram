@@ -2,6 +2,7 @@ package com.sparta.starstagram.util;
 
 import com.sparta.starstagram.constans.UserRoleEnum;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,12 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.Key;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.util.StringUtils;
-
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
@@ -74,13 +70,7 @@ public class JwtUtil {
      * JWT 헤더에 저장
      */
     public void addJwtToHeader(String token, HttpServletResponse res) {
-        try {
-            token = URLEncoder.encode(token, "utf-8").replace("\\+", "%20");
-
-            res.addHeader(AUTHORIZATION_HEADER, BEARER_PREFIX + token);
-        } catch (UnsupportedEncodingException e) {
-            logger.severe(e.getMessage());
-        }
+        res.addHeader(AUTHORIZATION_HEADER, token);
     }
 
     /**

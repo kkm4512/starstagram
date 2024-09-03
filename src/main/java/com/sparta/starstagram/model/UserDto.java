@@ -7,11 +7,11 @@ public class UserDto {
 
     private final Long id;
     private final String email;
-    private final String ninkname;
+    private final String username;
 
-    public UserDto(Long id, String email, String ninkname) {
+    public UserDto(Long id, String email, String username) {
         this.id = id;
         this.email = email;
-        this.ninkname = ninkname;
+        this.username = username;
     }
 }
