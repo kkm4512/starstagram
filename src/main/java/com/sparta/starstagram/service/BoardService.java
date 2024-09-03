@@ -35,8 +35,8 @@ public class BoardService {
     public ResponseEntity<BaseResponseDto> createBoard(RequestBoardDto reqDto, HttpServletRequest req) {
         String jwt = jwtUtil.resolveToken(req);
         Claims info = jwtUtil.getUserInfoFromToken(jwt);
-        String nickname = info.getId();
-        User user = utilFind.userFindByNickname(nickname);
+        String username = info.getId();
+        User user = utilFind.userFindByUsername(username);
         Board board = new Board(reqDto);
 //         연관관계 설정
         board.addUser(user);
@@ -56,11 +56,11 @@ public class BoardService {
     public ResponseEntity<BaseResponseDto> updateBoard(Long id, RequestBoardDto reqDto, HttpServletRequest req) {
         String jwt = jwtUtil.resolveToken(req);
         Claims info = jwtUtil.getUserInfoFromToken(jwt);
-        String nickname = info.getId();
-        User user = utilFind.userFindByNickname(nickname);
+        String username = info.getId();
+        User user = utilFind.userFindByUsername(username);
         Board board = utilFind.boardFindById(id);
-        System.out.println(user.getNickname());
-        System.out.println(board.getUser().getNickname());
+        System.out.println(user.getUsername());
+        System.out.println(board.getUser().getUsername());
         if (user.getId().equals(board.getUser().getId())) {}
         board.updateBoard(reqDto);
         return UtilResponse.getResponseEntity(BaseResponseEnum.BOARD_UPDATE_SUCCESS);

@@ -1,10 +1,10 @@
 package com.sparta.starstagram.service;
 
-import com.sparta.starstagram.model.UserDto;
 import com.sparta.starstagram.entity.Friend;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.model.FriendSaveRequestDto;
 import com.sparta.starstagram.model.FriendSaveResponseDto;
+import com.sparta.starstagram.model.UserDto;
 import com.sparta.starstagram.repository.FriendRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class FriendService {
         return new FriendSaveResponseDto(
                 saveFriend.getId(),
                 saveFriend.getFriendName(),
-                new UserDto(user.getId(), user.getEmail(), user.getNickname()));
+                new UserDto(user.getId(), user.getEmail(), user.getUsername()));
     }
 
     /**

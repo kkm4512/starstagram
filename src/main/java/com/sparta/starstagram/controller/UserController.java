@@ -22,10 +22,5 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
     }
 
-    @PostMapping("/api/register")
-    public void registerUser(@RequestParam String email,
-                             @RequestParam String password,
-                             @RequestParam String nickname) {
-        userService.registerUser(email, password, nickname);
-    }
+
 }

@@ -3,7 +3,7 @@ package com.sparta.starstagram.model;
 import lombok.Getter;
 
 @Getter
-public class RequestUserDto {
+public class UserRequestLoginDto {
     private String username;
-    private String email;
+    private String password;
 }

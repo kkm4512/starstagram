@@ -6,13 +6,17 @@ import com.sparta.starstagram.util.UtilFind;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class NewsSpeedController {
     private final NewsSpeedService pageNavigateService;
+    private final UtilFind utilFind;
 
 
     /**
@@ -25,7 +29,6 @@ public class NewsSpeedController {
      */
     @GetMapping("/query")
     public Page<ResponseBoardDto> getBoardPage(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, HttpServletRequest req) {
-        User user = utilFind
         return pageNavigateService.getBoardPage(page-1,size);
     }
 }

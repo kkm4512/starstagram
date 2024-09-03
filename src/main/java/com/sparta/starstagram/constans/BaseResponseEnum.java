@@ -30,6 +30,7 @@ public enum BaseResponseEnum {
     JWT_MALFORMED(false, HttpStatus.UNAUTHORIZED, "Jwt가 손상 되었습니다"),
     JWT_UNSUPPORTED(false, HttpStatus.UNAUTHORIZED, "지원되지 않는 Jwt 입니다"),
     JWT_SIGNATURE_FAIL(false, HttpStatus.UNAUTHORIZED, "시그니처 검증에 실패한 Jwt 입니다"),
+    JWT_NOT_VALID(false,HttpStatus.UNAUTHORIZED, "Jwt가 유효하지 않습니다"),
 
     // Auth
     NOT_ADMIN(false, HttpStatus.FORBIDDEN, "관리자만 접속 가능 합니다"),
