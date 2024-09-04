@@ -3,7 +3,7 @@ package com.sparta.starstagram.service;
 import com.sparta.starstagram.entity.Friend;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.model.friend.FriendSaveResponseDto;
-import com.sparta.starstagram.model.UserDto;
+import com.sparta.starstagram.model.user.UserDto;
 import com.sparta.starstagram.repository.FriendRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.UtilFind;

@@ -52,7 +52,7 @@ public class PostService {
     public BaseResponseEnum updatePost(Long id, RequestPostDto reqDto, User loginUser) {
         Post post = utilFind.postFindById(id);
         UtilValidator.isSameUser(loginUser,post.getUser());
-        post.updateBoard(reqDto);
+        post.updatePost(reqDto);
         return BaseResponseEnum.POST_UPDATE_SUCCESS;
     }
 

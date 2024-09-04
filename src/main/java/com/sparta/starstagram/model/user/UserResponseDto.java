@@ -1,4 +1,4 @@
-package com.sparta.starstagram.model;
+package com.sparta.starstagram.model.user;
 
 import lombok.Getter;
 import com.sparta.starstagram.entity.User;
