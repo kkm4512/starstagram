@@ -1,38 +1,89 @@
 package com.sparta.starstagram.service;
 
+import com.sparta.starstagram.constans.BaseResponseEnum;
+import com.sparta.starstagram.entity.DeletedUser;
+import com.sparta.starstagram.exception.JwtTokenExceptionHandler;
+import com.sparta.starstagram.exception.UserJoinIdException;
 import com.sparta.starstagram.model.UserNewPasswordRequestDto;
+import com.sparta.starstagram.model.UserRequestDto;
 import com.sparta.starstagram.model.UserResponseDto;
 import com.sparta.starstagram.entity.User;
+import com.sparta.starstagram.repository.DeletedUserRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DeletedUserRepository deletedUserRepository;
 
     private JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(String email, String password, String username) {
-        // 이메일 중복 확인
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("Email already exists");
+    public void registerUser(UserRequestDto requestDto) {
+        Optional<User> userByEmail = userRepository.findByEmail(requestDto.getEmail());
+        if (!userByEmail.isEmpty()) {
+            throw new UserJoinIdException(BaseResponseEnum.USER_DUPLICATED);
+        }
+
+        Optional<User> userByUsername = userRepository.findByUsername(requestDto.getUsername());
+        if (!userByUsername.isEmpty()) {
+            throw new UserJoinIdException(BaseResponseEnum.USER_USERNAME_DUPLICATED);
+        }
+
+        //탈퇴한 이메일 체크
+        if (deletedUserRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("탈퇴한 이메일 입니다. 재가입이 불가능합니다.");
         }
 
         // 새 사용자 생성 및 저장
         User newUser = new User();
-        newUser.setEmail(email);
-        newUser.updatePassword(password);
-        newUser.setUsername(username);
+        newUser.setEmail(requestDto.getEmail());
+        newUser.updatePassword(requestDto.getPassword());
+        newUser.setUsername(requestDto.getUsername());
 
         userRepository.save(newUser);
     }
+
+    /**
+     * 회원탈퇴
+     * @param email
+     * @param password
+     */
+    @Transactional
+    public void deleteUser(String email, String password) {
+        //사용자 조회
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        //비밀번호 확인
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        //삭제된 사용자인지 확인
+        if (deletedUserRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("이미 탈퇴한 계정입니다.");
+        }
+
+        //사용자 삭제
+        userRepository.delete(user);
+
+        //DeletedUser 엔티티에 추가
+        DeletedUser deletedUser = new DeletedUser(email, LocalDateTime.now());
+        deletedUserRepository.save(deletedUser);
+    }
+
 
 
 
@@ -83,6 +134,7 @@ public class UserService {
                 password.matches(".*[0-9].*") &&
                 password.matches(".*[!@#$%^&*()].*");
     }
+
 
 
 }
