@@ -10,13 +10,18 @@ import com.sparta.starstagram.model.UserResponseDto;
 import com.sparta.starstagram.repository.DeletedUserRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.JwtUtil;
+import com.sparta.starstagram.util.UtilFind;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.servlet.View;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,61 +29,75 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final DeletedUserRepository deletedUserRepository;
+    private final UtilFind utilFind;
+    private final View error;
 
     private JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(UserRequestDto requestDto) {
-        Optional<User> userByEmail = userRepository.findByEmail(requestDto.getEmail());
-        if (!userByEmail.isEmpty()) {
+    /**
+     * 회원가입
+     * @param requestDto
+     * @param bindingResult
+     * @author tiyu
+     */
+    @Transactional
+    public void registerUser(UserRequestDto requestDto, BindingResult bindingResult) {
+        //비밀번호 유효성 검사
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            throw new UserJoinIdException(BaseResponseEnum.USER_PASSWORD_FORMAT);
+        }
+
+        //중복된 이메일 체크
+        boolean userByEmail = utilFind.userDuplicatedEmail(requestDto.getEmail());
+        if (userByEmail) {
             throw new UserJoinIdException(BaseResponseEnum.USER_DUPLICATED);
         }
 
-        Optional<User> userByUsername = userRepository.findByUsername(requestDto.getUsername());
-        if (!userByUsername.isEmpty()) {
+        //중복된 유저네임 체크
+        boolean userByUsername = utilFind.userDuplicatedUsername(requestDto.getUsername());
+        if (userByUsername) {
             throw new UserJoinIdException(BaseResponseEnum.USER_USERNAME_DUPLICATED);
         }
 
         //탈퇴한 이메일 체크
         if (deletedUserRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("탈퇴한 이메일 입니다. 재가입이 불가능합니다.");
+            throw new UserJoinIdException(BaseResponseEnum.USER_DELETE_EMAIL);
         }
 
         // 새 사용자 생성 및 저장
         User newUser = new User();
-        String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
-        newUser.setEmail(requestDto.getEmail());
-        newUser.updatePassword(hashedPassword);
-        newUser.setUsername(requestDto.getUsername());
+        newUser.updateEmail(requestDto.getEmail());
+        newUser.updatePassword(requestDto.getPassword());
+        newUser.updateUserName(requestDto.getUsername());
 
         userRepository.save(newUser);
     }
 
     /**
      * 회원탈퇴
-     * @param email
-     * @param password
+     * @param user 로그인 한 유저의 정보
+     * @param password 회원탈퇴 시 비밀번호 확인
+     *
+     * @author tiyu
      */
     @Transactional
-    public void deleteUser(String email, String password) {
-        //사용자 조회
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
+    public void deleteUser(User user, String password) {
         //비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        //삭제된 사용자인지 확인
-        if (deletedUserRepository.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("이미 탈퇴한 계정입니다.");
+            throw new UserJoinIdException(BaseResponseEnum.USER_INVALID_PASSWORD);
         }
 
         //사용자 삭제
         userRepository.delete(user);
 
         //DeletedUser 엔티티에 추가
-        DeletedUser deletedUser = new DeletedUser(email, LocalDateTime.now());
+        DeletedUser deletedUser = new DeletedUser(user.getEmail(), LocalDateTime.now());
         deletedUserRepository.save(deletedUser);
     }
 

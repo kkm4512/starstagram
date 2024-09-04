@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class UtilFind {
@@ -78,5 +80,37 @@ public class UtilFind {
      */
     public Post postFindById(Long id){
         return postRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.POST_NOT_FOUND));
+    }
+
+    /**
+     * 중복된 이메일 체크
+     *
+     * @param email
+     * @return
+     * @author tiyu
+     */
+    public boolean userDuplicatedEmail(String email) {
+        Optional<User> userByEmail = userRepository.findByEmail(email);
+        if (userByEmail.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 중복된 닉네임 체크
+     *
+     * @param username
+     * @return
+     * @author tiyu
+     */
+    public boolean userDuplicatedUsername(String username) {
+        Optional<User> userByUsername = userRepository.findByUsername(username);
+        if (userByUsername.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
