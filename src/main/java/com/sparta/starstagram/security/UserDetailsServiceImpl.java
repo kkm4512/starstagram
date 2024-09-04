@@ -1,7 +1,6 @@
 package com.sparta.starstagram.security;
 
 import com.sparta.starstagram.entity.User;
-import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.UtilFind;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
     private final UtilFind utilFind;
 
     @Override

@@ -3,6 +3,7 @@ package com.sparta.starstagram.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.exception.HandleNotFoundException;
+import com.sparta.starstagram.model.BaseResponseDto;
 import com.sparta.starstagram.model.UserRequestLoginDto;
 import com.sparta.starstagram.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -20,9 +21,11 @@ import java.io.IOException;
 @Slf4j(topic = "JwtAuthenticationFilter")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
+    private final ObjectMapper objectMapper;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil,ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
+        this.objectMapper = objectMapper;
         setFilterProcessesUrl("/api/user/login");
     }
 
@@ -53,6 +56,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         jwtUtil.addJwtToHeader(jwt, res);
         log.info("JWT 인증 로직 시도 끝");
         log.info("로그인 시도 끝");
+        BaseResponseEnum responseEnum = BaseResponseEnum.USER_LOGIN_SUCCESS;
+        res.setStatus(responseEnum.getStatus());
+        res.setContentType("application/json;charset=UTF-8");
+        res.getWriter()
+                .write(objectMapper.writeValueAsString(new BaseResponseDto(responseEnum)));
     }
 
     //로그인 실패

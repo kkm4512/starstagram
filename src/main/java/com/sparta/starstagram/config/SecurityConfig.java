@@ -1,5 +1,6 @@
 package com.sparta.starstagram.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.starstagram.security.JwtAuthenticationFilter;
 import com.sparta.starstagram.security.JwtAuthorizationFilter;
 import com.sparta.starstagram.security.UserDetailsServiceImpl;
@@ -28,6 +29,7 @@ public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final AuthenticationEntryPoint entryPoint;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -43,7 +45,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil,objectMapper);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }

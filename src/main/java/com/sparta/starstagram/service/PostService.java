@@ -4,6 +4,7 @@ import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.Post;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.HandleNotFoundException;
+import com.sparta.starstagram.exception.UserMismatchException;
 import com.sparta.starstagram.model.post.RequestPostDto;
 import com.sparta.starstagram.model.post.ResponsePostDto;
 import com.sparta.starstagram.repository.PageNavigateRepository;
@@ -35,7 +36,7 @@ public class PostService {
         Post post = new Post(reqDto);
         post.addUser(loginUser); // 연관관계 설정
         postRepository.save(post);
-        return BaseResponseEnum.BOARD_SAVE_SUCCESS;
+        return BaseResponseEnum.POST_SAVE_SUCCESS;
     }
 
     /**
@@ -43,15 +44,16 @@ public class PostService {
      *
      * @param id 수정할 게시글 ID
      * @param reqDto 수정할 게시글 내용
-     * @return 성공하였다는 응답 반환
+     * @return 성공하였다는 응답
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
+     * @throws UserMismatchException 유저가 다른 게시글을 수정,삭제 할때 발생되는 예외
      */
     @Transactional
     public BaseResponseEnum updatePost(Long id, RequestPostDto reqDto, User loginUser) {
         Post post = utilFind.postFindById(id);
         UtilValidator.isSameUser(loginUser,post.getUser());
         post.updateBoard(reqDto);
-        return BaseResponseEnum.BOARD_UPDATE_SUCCESS;
+        return BaseResponseEnum.POST_UPDATE_SUCCESS;
     }
 
     /**
@@ -60,13 +62,14 @@ public class PostService {
      * @param id 수정할 게시글 ID
      * @return 성공하였다는 응답 반환
      * @throws HandleNotFoundException 게시글이 없을시 발생되는 예외
+     * @throws UserMismatchException 유저가 다른 게시글을 수정,삭제 할때 발생되는 예외
      */
     @Transactional
     public BaseResponseEnum deletePost(Long id, User loginUser) {
         Post post = utilFind.postFindById(id);
         UtilValidator.isSameUser(loginUser,post.getUser());
         postRepository.delete(post);
-        return BaseResponseEnum.BOARD_DELETE_SUCCESS;
+        return BaseResponseEnum.POST_DELETE_SUCCESS;
     }
 
     /**
