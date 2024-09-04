@@ -6,10 +6,14 @@ import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.HandleNotFoundException;
 import com.sparta.starstagram.model.post.RequestPostDto;
 import com.sparta.starstagram.model.post.ResponsePostDto;
+import com.sparta.starstagram.repository.PageNavigateRepository;
 import com.sparta.starstagram.repository.PostRepository;
 import com.sparta.starstagram.util.UtilFind;
 import com.sparta.starstagram.util.UtilValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final PageNavigateRepository pageNavigateRepository;
     private final UtilFind utilFind;
 
     /**
@@ -75,5 +80,11 @@ public class PostService {
     public ResponsePostDto getPost(Long id) {
         Post board = utilFind.postFindById(id);
         return new ResponsePostDto(board);
+    }
+
+    public Page<ResponsePostDto> getPostPage(int page, int size, User user) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> postList = pageNavigateRepository.findPostsByUserAndUserFriends(user,pageable);
+        return postList.map(ResponsePostDto::new);
     }
 }
