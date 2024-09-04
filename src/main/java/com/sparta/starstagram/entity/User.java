@@ -26,23 +26,14 @@ public class User extends TimeStamp {
         this.username = username;
     }
 
-
-
-
     // 암호화된 패스워드를 저장
-//    public void setPassword(String password) {
-//        this.password = new BCryptPasswordEncoder().encode(password);
-//    }
-
     public void updatePassword(String password) {
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
-
-    public void setEmail(String email) {
+    public void updateEmail(String email) {
         this.email = email;
     }
-
-    public void setUsername(String username) {
+    public void updateUserName(String username) {
         this.username = username;
     }
 }
