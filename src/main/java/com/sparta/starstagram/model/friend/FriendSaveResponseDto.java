@@ -1,5 +1,6 @@
-package com.sparta.starstagram.model;
+package com.sparta.starstagram.model.friend;
 
+import com.sparta.starstagram.model.UserDto;
 import lombok.Getter;
 
 @Getter
