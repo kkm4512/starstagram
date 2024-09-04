@@ -1,9 +1,10 @@
 package com.sparta.starstagram.util;
 
+import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.constans.UserRoleEnum;
+import com.sparta.starstagram.exception.JwtTokenExceptionHandler;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -97,18 +98,20 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             logger.severe("Invalid JWT signature, 유효하지 않은 JWT 서명 입니다.");
+            throw new JwtTokenExceptionHandler(BaseResponseEnum.JWT_NOT_VALID);
         } catch (ExpiredJwtException e) {
             logger.severe("Expired JWT token, 만료 된 JWT token 입니다.");
+            throw new JwtTokenExceptionHandler(BaseResponseEnum.JWT_EXPIRED);
         } catch (UnsupportedJwtException e) {
             logger.severe("Unsupported JWT token, 지원되지 않은 JWT 토큰 입니다.");
+            throw new JwtTokenExceptionHandler(BaseResponseEnum.JWT_UNSUPPORTED);
         } catch (IllegalArgumentException e) {
             logger.severe("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            throw new JwtTokenExceptionHandler(BaseResponseEnum.JWT_NOT_FOUND);
         }
-
-        return false;
+        return true;
     }
 
     public Collection<? extends GrantedAuthority> getUserAuthorityFromToken(String token) {

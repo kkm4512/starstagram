@@ -1,10 +1,13 @@
 package com.sparta.starstagram.controller;
 
+import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.model.FriendSaveRequestDto;
 import com.sparta.starstagram.model.FriendSaveResponseDto;
+import com.sparta.starstagram.security.UserDetailsImpl;
 import com.sparta.starstagram.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

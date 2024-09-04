@@ -33,7 +33,7 @@ public class FriendService {
         Friend newFriend = new Friend(friendSaveRequestDto.getId(), friendSaveRequestDto.getFriendName(), user);
         Friend saveFriend = friendRepository.save(newFriend);
         return new FriendSaveResponseDto(
-                saveFriend.getId(),
+                saveFriend.getUserFriendId(),
                 saveFriend.getFriendName(),
                 new UserDto(user.getId(), user.getEmail(), user.getUsername()));
     }
