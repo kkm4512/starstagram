@@ -12,6 +12,7 @@ public class Post extends TimeStamp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(length = 1000)
     private String detail;
 
     @ManyToOne

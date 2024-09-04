@@ -4,6 +4,7 @@ import com.sparta.starstagram.security.JwtAuthenticationFilter;
 import com.sparta.starstagram.security.JwtAuthorizationFilter;
 import com.sparta.starstagram.security.UserDetailsServiceImpl;
 import com.sparta.starstagram.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,16 +15,19 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final AuthenticationEntryPoint entryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -31,11 +35,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public SecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration) {
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-        this.authenticationConfiguration = authenticationConfiguration;
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -67,9 +66,13 @@ public class SecurityConfig {
         // 요청 처리
         http.authorizeHttpRequests(authReq ->
                 authReq
-                        .requestMatchers("/api/user/**").permitAll() // /api/user 로시작하는 요청 모두 접근 허용 (인증 x)
+                        .requestMatchers("/api/user/login").permitAll() // /api/login 로시작하는 요청 모두 접근 허용 (인증 x)
+                        .requestMatchers("/api/user/signup").permitAll() // /api/signup 로시작하는 요청 모두 접근 허용 (인증 x)
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 처리
         );
+
+        // Jwt exception handling
+        http.exceptionHandling(handler -> handler.authenticationEntryPoint(entryPoint));
 
         //필터관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);

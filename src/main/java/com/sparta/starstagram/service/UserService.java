@@ -2,18 +2,15 @@ package com.sparta.starstagram.service;
 
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.DeletedUser;
-import com.sparta.starstagram.exception.JwtTokenExceptionHandler;
+import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.UserJoinIdException;
 import com.sparta.starstagram.model.UserNewPasswordRequestDto;
 import com.sparta.starstagram.model.UserRequestDto;
 import com.sparta.starstagram.model.UserResponseDto;
-import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.repository.DeletedUserRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.JwtUtil;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +46,9 @@ public class UserService {
 
         // 새 사용자 생성 및 저장
         User newUser = new User();
+        String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
         newUser.setEmail(requestDto.getEmail());
-        newUser.updatePassword(requestDto.getPassword());
+        newUser.updatePassword(hashedPassword);
         newUser.setUsername(requestDto.getUsername());
 
         userRepository.save(newUser);

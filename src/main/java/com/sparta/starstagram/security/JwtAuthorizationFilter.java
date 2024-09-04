@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Order(0)
 @Slf4j(topic = "JwtAuthorizationFilter")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -38,7 +40,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new JwtTokenExceptionHandler(BaseResponseEnum.JWT_NOT_VALID);
+            req.setAttribute("exception", e);
+            throw e;
         }
         fc.doFilter(req, res);
         log.info("JWT 인가 로직 끝");
