@@ -4,6 +4,7 @@ import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.Post;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.HandleNotFoundException;
+import com.sparta.starstagram.repository.FriendRepository;
 import com.sparta.starstagram.repository.PostRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class UtilFind {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final FriendRepository friendRepository;
     private final JwtUtil jwtUtil;
 
     /**
@@ -78,5 +80,30 @@ public class UtilFind {
      */
     public Post postFindById(Long id){
         return postRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.POST_NOT_FOUND));
+    }
+
+    /**
+     * 친구로 추가하려는 유저가 있는지, 친구 찾기 메서드?
+     *
+     * @param friendId 친구로 추가할 친구의 Id
+     * @return 찾은 User 객체 반환
+     * @throws NullPointerException 해당하는 유저가 존재하지 않을 경우 예외 처리
+     *
+     * @author 황윤서
+     */
+    public User findFriendById(Long friendId) {
+        return userRepository.findById(friendId).orElseThrow(() -> new NullPointerException("해당하는 유저가 없습니다."));
+    }
+
+    /**
+     * 친구 관계가 존재하는지 확인하는 메서드
+     *
+     * @parm friendId 친구 Id
+     * @return 친구가 존재하는지 여부 반환
+     *
+     * @author 황윤서
+     */
+    public boolean existsFriendById(Long friendId) {
+        return friendRepository.existsById(friendId);
     }
 }
