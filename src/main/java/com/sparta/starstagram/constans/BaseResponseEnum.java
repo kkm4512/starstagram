@@ -17,6 +17,8 @@ public enum BaseResponseEnum {
     USER_INVALID_CREDENTIALS(false, HttpStatus.UNAUTHORIZED.value(), "아이디 또는 비밀번호가 틀렸습니다"),
     USER_MISMATCH_BOARD(false, HttpStatus.BAD_REQUEST.value(), "사용자가 요청한 게시글은, 본인이 작성한 게시글이 아닙니다"),
     USER_DUPLICATED(false, HttpStatus.CONFLICT.value(), "중복된 이메일 입니다"),
+    USER_USERNAME_DUPLICATED(false, HttpStatus.CONFLICT.value(), "중복된 닉네임 입니다"),
+    USER_PASSWORD_FORMAT(false, HttpStatus.BAD_REQUEST.value(), "틀림 ㅅㄱ"),
 
     // Board
     BOARD_SAVE_SUCCESS(true, HttpStatus.OK.value(), "게시글 저장에 성공 하였습니다"),
@@ -37,6 +39,7 @@ public enum BaseResponseEnum {
 
     // Encode
     UNSUPPORTED_ENCODING(false, HttpStatus.BAD_REQUEST.value(), "클라이언트로 부터 들어온 형식은, 인코딩 할 수 없는 형식 입니다");
+
 
     private final boolean success;
     private final int status;
