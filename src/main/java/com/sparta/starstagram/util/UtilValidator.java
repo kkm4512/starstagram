@@ -13,6 +13,7 @@ public class UtilValidator {
      * @param loginUser 로그인한 유저
      * @param boardUser 게시글을 작성한 유저
      * @author 김경민
+     * @throws UserMismatchException 유저가 다른 게시글을 수정,삭제 할때 발생되는 예외
      */
     public static void isSameUser(User loginUser,User boardUser){
         if (!loginUser.getUsername().equals(boardUser.getUsername())) throw new UserMismatchException(BaseResponseEnum.USER_MISMATCH_BOARD);

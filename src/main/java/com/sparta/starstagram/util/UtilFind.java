@@ -59,6 +59,7 @@ public class UtilFind {
      *
      * @param req 서블릿 리퀘스트
      * @return username으로 찾은 유저 반환
+     * @author 김경민
      */
     public User userFindByHeaderJwtUsername(HttpServletRequest req){
         String jwt = jwtUtil.resolveToken(req);
@@ -76,6 +77,6 @@ public class UtilFind {
      * @author 김경민
      */
     public Post postFindById(Long id){
-        return postRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.BOARD_NOT_FOUND));
+        return postRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.POST_NOT_FOUND));
     }
 }
