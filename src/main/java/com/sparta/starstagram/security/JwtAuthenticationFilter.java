@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.exception.HandleNotFoundException;
 import com.sparta.starstagram.model.BaseResponseDto;
-import com.sparta.starstagram.model.UserRequestLoginDto;
+import com.sparta.starstagram.model.user.UserRequestLoginDto;
 import com.sparta.starstagram.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

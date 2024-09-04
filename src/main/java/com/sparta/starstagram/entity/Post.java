@@ -25,7 +25,7 @@ public class Post extends TimeStamp {
     }
 
     // 게시글 수정
-    public void updateBoard(RequestPostDto reqDto){
+    public void updatePost(RequestPostDto reqDto){
         this.title = reqDto.getTitle();
         this.detail = reqDto.getDetail();
     }

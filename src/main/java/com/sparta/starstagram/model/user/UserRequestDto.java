@@ -1,9 +1,13 @@
-package com.sparta.starstagram.model;
+package com.sparta.starstagram.model.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class UserRequestDto {
     private String email;
