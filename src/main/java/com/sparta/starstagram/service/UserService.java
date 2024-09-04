@@ -28,7 +28,7 @@ public class UserService {
         // 새 사용자 생성 및 저장
         User newUser = new User();
         newUser.setEmail(email);
-        newUser.setPassword(password);
+        newUser.updatePassword(password);
         newUser.setUsername(username);
 
         userRepository.save(newUser);
@@ -65,13 +65,20 @@ public class UserService {
         }
 
         //새로운 비밀번호 인코딩 하여 저장
-        user.setPassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
+//        user.setPassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
+//
+//        return new UserResponseDto(user);
+
+        //새로운 비밀번호 인코딩 하여 저장
+        String encodedPassword = passwordEncoder.encode(userRequestDto.getNewPassword());
+        user.updatePassword(encodedPassword);
 
         return new UserResponseDto(user);
     }
 
     private boolean isValidPasswordFormat(String password) {
         return password.length() >= 8 &&
+
                 password.matches(".*[A-Z].*") &&
                 password.matches(".*[0-9].*") &&
                 password.matches(".*[!@#$%^&*()].*");
