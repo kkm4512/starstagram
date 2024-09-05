@@ -1,6 +1,7 @@
 package com.sparta.starstagram.entity;
 
 import com.sparta.starstagram.constans.UserRoleEnum;
+import com.sparta.starstagram.model.user.UserRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,13 @@ public class User extends TimeStamp {
     private UserRoleEnum role = UserRoleEnum.USER;
 
 
+    public User(UserRequestDto requestDto) {
+        this.email = requestDto.getEmail();
+        this.username = requestDto.getUsername();
+        this.password = new BCryptPasswordEncoder().encode(requestDto.getPassword());
+    }
+
+
     public User(String email, String username, String encodedPassword) {
         this.email = email;
         this.password = encodedPassword;
@@ -32,11 +40,4 @@ public class User extends TimeStamp {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public void updateEmail(String email) {
-        this.email = email;
-    }
-
-    public void updateUserName(String username) {
-        this.username = username;
-    }
 }

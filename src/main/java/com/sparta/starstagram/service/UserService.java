@@ -73,11 +73,7 @@ public class UserService {
         }
 
         // 새 사용자 생성 및 저장
-        User newUser = new User();
-        newUser.updateEmail(requestDto.getEmail());
-        newUser.updatePassword(requestDto.getPassword());
-        newUser.updateUserName(requestDto.getUsername());
-
+        User newUser = new User(requestDto);
 
         userRepository.save(newUser);
     }
