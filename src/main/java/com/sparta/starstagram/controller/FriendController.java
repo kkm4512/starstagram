@@ -3,7 +3,6 @@ package com.sparta.starstagram.controller;
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.model.BaseResponseDto;
-import com.sparta.starstagram.model.friend.FriendSaveResponseDto;
 import com.sparta.starstagram.security.UserDetailsImpl;
 import com.sparta.starstagram.service.FriendService;
 import com.sparta.starstagram.util.UtilResponse;
@@ -21,7 +20,7 @@ public class FriendController {
 
 
     /**
-     * 팔로우 API
+     * 팔로우 추가 API
      *
      * @author 황윤서
      */
@@ -35,15 +34,13 @@ public class FriendController {
     }
 
     /**
-     * 친구를 삭제하는 메서드
-     *
-     * @param friendId 삭제하려는 친구의 아이디
+     * 팔로우 삭제 API
      *
      * @author 황윤서
      */
     @DeleteMapping
-    public ResponseEntity<Void> deleteFriend(@PathVariable("friendId") Long friendId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        friendService.deleteFriend(friendId, userDetails.getUser());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<BaseResponseDto> deleteFriend(@PathVariable("friendId") Long friendId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        BaseResponseEnum responseEnum = friendService.deleteFriend(friendId, userDetails.getUser());
+        return UtilResponse.getResponseEntity(responseEnum);
     }
 }

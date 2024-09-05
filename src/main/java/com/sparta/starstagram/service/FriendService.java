@@ -4,8 +4,6 @@ import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.Friend;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.exception.HandleNotFoundException;
-import com.sparta.starstagram.model.friend.FriendSaveResponseDto;
-import com.sparta.starstagram.model.user.UserDto;
 import com.sparta.starstagram.repository.FriendRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.UtilFind;
@@ -34,13 +32,13 @@ public class FriendService {
         try {
             User friend = utilFind.findFriendById(friendId);
 
-            // 이미 친구로 등록되어있는지 확인하는 로직
+            // 이미 팔로우되어있는지 확인하는 로직
             Friend existingFriend = friendRepository.findByUserAndFriend(loginUser, friend);
-            if(existingFriend != null) {
+            if (existingFriend != null) {
                 return BaseResponseEnum.ALREADY_FRIEND;
             }
 
-            // 새로운 친구 관계 추가
+            // 새로운 팔로우 관계 생성
             Friend newFriend = new Friend(loginUser, friend);
             friendRepository.save(newFriend);
 
@@ -51,22 +49,31 @@ public class FriendService {
     }
 
     /**
-     * 친구를 삭제하는 메서드
+     * 로그인한 사용자가 기존에 팔로우했던 사용자를 팔로우 삭제하는 로직
      *
-     * @param friendId 삭제할 친구의 ID(=유저 ID와 같다)
-     * @throws NullPointerException 삭제하려는 친구가 존재하지 않을 경우 예외 처리
-     * @author 황윤서
+     * @param friendId 팔로우 할 친구의 ID(=유저 ID와 같다)
+     * @param loginUser 현재 로그인한 사용자
+     * @throws HandleNotFoundException 팔로우 삭제하려는 사용자가 존재하지 않을 경우 예외 처리
      */
     @Transactional
-    public void deleteFriend(Long friendId, User loginUser) {
-        User friend = utilFind.findFriendById(friendId);
+    public BaseResponseEnum deleteFriend(Long friendId, User loginUser) {
+        try {
+            // 팔로우 삭제하려는 사용자 찾기
+            User friend = utilFind.findFriendById(friendId);
 
-        Friend friendEntity = friendRepository.findByUserAndFriend(loginUser, friend);
-        if (friendEntity == null) {
-            throw new HandleNotFoundException(BaseResponseEnum.FOLLOW_FRIEND_NOT_FOUND);
+            // 팔로우 관계가 존재하는지 확인
+            Friend friendEntity = friendRepository.findByUserAndFriend(loginUser, friend);
+            if (friendEntity == null) {
+                throw new HandleNotFoundException(BaseResponseEnum.FOLLOW_FRIEND_NOT_FOUND);
+            }
+            // 팔로우 삭제
+            friendRepository.delete(friendEntity);
+            return BaseResponseEnum.FOLLOW_DELETE_SUCCESS;
+        } catch (Exception e) {
+            return BaseResponseEnum.FOLlOW_DELETE_FAIL;
         }
 
-        friendRepository.delete(friendEntity);
     }
 
 }
+
