@@ -44,7 +44,7 @@ public class PostController {
     }
 
     /**
-     * 특정 게시글 수정 API
+     * 특정 게시글 삭제 API
      *
      * @author 김경민
      */
