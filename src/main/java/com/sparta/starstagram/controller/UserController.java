@@ -2,7 +2,7 @@ package com.sparta.starstagram.controller;
 
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.User;
-import com.sparta.starstagram.model.*;
+import com.sparta.starstagram.model.BaseResponseDto;
 import com.sparta.starstagram.model.user.UserDeleteRequest;
 import com.sparta.starstagram.model.user.UserNewPasswordRequestDto;
 import com.sparta.starstagram.model.user.UserRequestDto;
@@ -23,16 +23,33 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
+    /**
+     * 프로필 조회 API
+     *
+     * @param id 조회할 유저의 ID
+     *
+     * @return 유저 정보를 담은 ResponseEntity
+     *
+     * @author 이태건
+     */
     @GetMapping("/api/user/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
-    @PutMapping("/api/user/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserNewPasswordRequestDto userRequestDto) {
-        return ResponseEntity.ok(userService.updateUser(id, userRequestDto));
-    }
+    /**
+     * 프로필 수정 기능 API
+     *
+     * @return 수정된 유저 정보를 담은 ResponseEntity
+     *
+     * @author 이태건
+     */
+   @PutMapping("api/user")
+   public ResponseEntity<BaseResponseDto> updateUser(@RequestBody UserNewPasswordRequestDto userRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User loginUser = userDetails.getUser();
+        BaseResponseEnum responseEnum = userService.updateUser(userRequestDto, loginUser);
+        return UtilResponse.getResponseEntity(responseEnum);
+   }
 
     /**
      * 회원가입
@@ -41,6 +58,20 @@ public class UserController {
      *
      * @author tiyu
      */
+    // 포스트맨 테스트 URL = http://localhost:8080/api/user/signup?email=test@naver.com&password=123&username=test
+//    @PostMapping("/api/user/signup")
+//    public void registerUser(@RequestBody @Valid UserRequestDto requestDto, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//
+//            for (FieldError error : bindingResult.getFieldErrors()) {
+//                errors.put(error.getField(), error.getDefaultMessage());
+//            }
+//
+//            throw new UserPasswordException(BaseResponseEnum.USER_PASSWORD_FORMAT);
+//        }
+//        userService.registerUser(requestDto);
+//    }
     @PostMapping("/api/user/signup")
     public ResponseEntity<BaseResponseDto> registerUser(@RequestBody @Valid UserRequestDto requestDto, BindingResult bindingResult) {
         try {

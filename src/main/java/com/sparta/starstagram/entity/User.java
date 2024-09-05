@@ -20,6 +20,7 @@ public class User extends TimeStamp {
     @Column(nullable = false)
     private UserRoleEnum role = UserRoleEnum.USER;
 
+
     public User(String email, String username, String encodedPassword) {
         this.email = email;
         this.password = encodedPassword;
@@ -30,9 +31,11 @@ public class User extends TimeStamp {
     public void updatePassword(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
+
     public void updateEmail(String email) {
         this.email = email;
     }
+
     public void updateUserName(String username) {
         this.username = username;
     }

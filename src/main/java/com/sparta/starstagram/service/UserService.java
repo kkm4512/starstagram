@@ -3,6 +3,7 @@ package com.sparta.starstagram.service;
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.DeletedUser;
 import com.sparta.starstagram.entity.User;
+import com.sparta.starstagram.exception.HandlePasswordValidateException;
 import com.sparta.starstagram.exception.UserJoinIdException;
 import com.sparta.starstagram.model.user.UserNewPasswordRequestDto;
 import com.sparta.starstagram.model.user.UserRequestDto;
@@ -37,6 +38,7 @@ public class UserService {
 
     /**
      * 회원가입
+     *
      * @param requestDto
      * @param bindingResult
      * @author tiyu
@@ -76,14 +78,15 @@ public class UserService {
         newUser.updatePassword(requestDto.getPassword());
         newUser.updateUserName(requestDto.getUsername());
 
+
         userRepository.save(newUser);
     }
 
     /**
      * 회원탈퇴
-     * @param user 로그인 한 유저의 정보
-     * @param password 회원탈퇴 시 비밀번호 확인
      *
+     * @param user     로그인 한 유저의 정보
+     * @param password 회원탈퇴 시 비밀번호 확인
      * @author tiyu
      */
     @Transactional
@@ -102,56 +105,51 @@ public class UserService {
     }
 
 
-
-
+    /**
+     * 프로필 조회로직  민감한 정보는 제외한 username과 email만 가져옴
+     *
+     * @param id 조회할 정보
+     * @return 조회된 프로필 반환
+     * @author 이태건
+     */
     @Transactional(readOnly = true)
     public UserResponseDto getUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User user = utilFind.userFindById(id);
         return new UserResponseDto(user);
     }
 
 
-
+    /**
+     * 프로필 수정 로직
+     *
+     * @param userRequestDto 현재 비밀번호와 새 비밀번호 정보를 담고 있는 DTO
+     * @param loginUser      로그인된 사용자 정보를 담고 있는 User 객체
+     * @author 이태건
+     */
     @Transactional
-    public UserResponseDto updateUser(Long id, UserNewPasswordRequestDto userRequestDto) {
-        // ID를 통해 사용자 정보 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
+    public BaseResponseEnum updateUser(UserNewPasswordRequestDto userRequestDto, User loginUser) {
         //입력된 현재 비밀번호 올바른지 확인
-        if (!passwordEncoder.matches(userRequestDto.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Current password is incorrect");
+        if (!passwordEncoder.matches(userRequestDto.getCurrentPassword(), loginUser.getPassword())) {
+            throw new HandlePasswordValidateException(BaseResponseEnum.PASSWORD_MISMATCH);
         }
-
         //새 비밀번호와 현재 비밀번호가 동일하지 않은지 확인
-        if (passwordEncoder.matches(userRequestDto.getNewPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("New password cannot be the same as the current password");
+        if (passwordEncoder.matches(userRequestDto.getNewPassword(), loginUser.getPassword())) {
+            throw new HandlePasswordValidateException(BaseResponseEnum.DUPLICATE_NEW_PASSWORD);
         }
-
         //새 비밀번호 형식이 올바른지 확인
         if (!isValidPasswordFormat(userRequestDto.getNewPassword())) {
-            throw new IllegalArgumentException("New password format is invalid");
+            throw new HandlePasswordValidateException(BaseResponseEnum.PASSWORD_FORMAT_NOT_VALID);
         }
-
-        //새로운 비밀번호 인코딩 하여 저장
-//        user.setPassword(passwordEncoder.encode(userRequestDto.getNewPassword()));
-//
-//        return new UserResponseDto(user);
-
         //새로운 비밀번호 인코딩 하여 저장
         String encodedPassword = passwordEncoder.encode(userRequestDto.getNewPassword());
-        user.updatePassword(encodedPassword);
-
-        return new UserResponseDto(user);
+        loginUser.updatePassword(encodedPassword);
+        return BaseResponseEnum.USER_PASSWORD_CHANGE_SUCCESS;
     }
-
+    // 정규식에 부합하는 조건이되는지 검사
     private boolean isValidPasswordFormat(String password) {
         return password.length() >= 8 &&
-
                 password.matches(".*[A-Z].*") &&
                 password.matches(".*[0-9].*") &&
                 password.matches(".*[!@#$%^&*()].*");
     }
-
-
-
 }
