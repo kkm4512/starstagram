@@ -53,7 +53,17 @@ public enum BaseResponseEnum {
     NOT_ADMIN(false, HttpStatus.FORBIDDEN.value(), "관리자만 접속 가능 합니다"),
 
     // Encode
-    UNSUPPORTED_ENCODING(false, HttpStatus.BAD_REQUEST.value(), "클라이언트로 부터 들어온 형식은, 인코딩 할 수 없는 형식 입니다");
+    UNSUPPORTED_ENCODING(false, HttpStatus.BAD_REQUEST.value(), "클라이언트로 부터 들어온 형식은, 인코딩 할 수 없는 형식 입니다"),
+
+    // Password validate
+    PASSWORD_MISMATCH(false, HttpStatus.BAD_REQUEST.value(), "부합하지않는 비밀번호입니다"),
+
+    DUPLICATE_NEW_PASSWORD(false, HttpStatus.BAD_REQUEST.value(), "새 비밀번호와 현재 비밀번호가 동일합니다"),
+
+    PASSWORD_FORMAT_NOT_VALID(false, HttpStatus.BAD_REQUEST.value(), "새 비밀번호 형식이 올바르지 않습니다");
+
+
+
 
 
     private final boolean success;
