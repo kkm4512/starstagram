@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JwtAuthenticationFilter(JwtUtil jwtUtil,ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
         this.objectMapper = objectMapper;
-        setFilterProcessesUrl("/api/user/login");
+        setFilterProcessesUrl("/api/users/login");
     }
 
     //사용자 인증 시도 메서드
