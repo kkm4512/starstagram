@@ -46,7 +46,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 setAuthentication(claims.getSubject());
             } else {
                 // 로그인,회원가입 경로가 아니고 jwt가 없다면
-                if (!reqURL.equals("/api/user/signup") && !reqURL.equals("/api/user/login") && !StringUtils.hasText(jwt)) {
+                if (!reqURL.equals("/api/users/signup") && !reqURL.equals("/api/users/login") && !StringUtils.hasText(jwt)) {
                     BaseException e = new JwtTokenExceptionHandler(BaseResponseEnum.JWT_NOT_FOUND);
                     throw e;
                 }

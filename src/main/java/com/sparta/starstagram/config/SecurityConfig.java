@@ -74,8 +74,8 @@ public class SecurityConfig {
         // 요청 처리
         http.authorizeHttpRequests(authReq ->
                 authReq
-                        .requestMatchers("/api/user/login").permitAll() // /api/login 로시작하는 요청 모두 접근 허용 (인증 x)
-                        .requestMatchers("/api/user/signup").permitAll() // /api/signup 로시작하는 요청 모두 접근 허용 (인증 x)
+                        .requestMatchers("/api/users/login").permitAll() // /api/login 로시작하는 요청 모두 접근 허용 (인증 x)
+                        .requestMatchers("/api/users/signup").permitAll() // /api/signup 로시작하는 요청 모두 접근 허용 (인증 x)
                         .anyRequest().authenticated() // 그 외 모든 요청 인증 처리
         );
 
