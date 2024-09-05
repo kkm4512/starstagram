@@ -21,12 +21,7 @@ public class FriendController {
 
 
     /**
-     * 로그인한 사용자가 친구를 추가하는 기능을 수행하는 메서드
-     *
-     * @param friendId 추가하려는 친구의 아이디(=유저 아이디랑 같음)
-     * @param userDetails 현재 로그인된 사용자의 정보
-     * @return FriendSaveResponseDto 현재 로그인한 사용자를 인자로 받아서 친구를 저장한 값을 FriendSaveResponseDto 객체로 반환
-     * @throws ???중복된 친구는 친구 추가할 수 없다를 예외 처리하고 싶은데...? 예외를 배웠어야 말이징..
+     * 팔로우 API
      *
      * @author 황윤서
      */
@@ -34,9 +29,9 @@ public class FriendController {
     public ResponseEntity<BaseResponseDto> saveFriend(@PathVariable Long friendId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User loginUser = userDetails.getUser();
 
-        FriendSaveResponseDto friendSaveResponseDto = friendService.saveFriend(friendId, loginUser);
+        BaseResponseEnum responseEnum = friendService.saveFriend(friendId, loginUser);
 
-        return UtilResponse.getResponseEntity(BaseResponseEnum.FOLLOW_SUCCESS);
+        return UtilResponse.getResponseEntity(responseEnum);
     }
 
     /**
