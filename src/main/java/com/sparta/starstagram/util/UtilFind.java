@@ -30,7 +30,7 @@ public class UtilFind {
      * @throws HandleNotFoundException 사용자가 없을시 발생되는 예외
      * @author 김경민
      */
-    public User userFindById(Long id){
+    public  User userFindById(Long id){
         return userRepository.findById(id).orElseThrow(() -> new HandleNotFoundException(BaseResponseEnum.USER_NOT_FOUND));
     }
 
