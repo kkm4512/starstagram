@@ -18,6 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 
+/**
+ * 인증처리 필터
+ */
 @Slf4j(topic = "JwtAuthenticationFilter")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
@@ -43,8 +46,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     )
             );
         } catch (Exception e) {
-            log.error(e.getMessage());
-            req.setAttribute("exception", new HandleNotFoundException(BaseResponseEnum.USER_NOT_FOUND));
+            HandleNotFoundException exception = new HandleNotFoundException(BaseResponseEnum.USER_NOT_FOUND);
+            // 이게 제일 중요함 !!
+            req.setAttribute("exception", exception);
+            log.error(exception.getResponse().getMessage());
+            // 여긴 사실 아무런 의미가 없고 단순히 AuthenticationException 던지게해서
+            // JwtAuthenticationEntryPoint을 호출하게 하기 위함
             throw new HandleNotFoundException(BaseResponseEnum.USER_NOT_FOUND);
         }
     }

@@ -3,6 +3,9 @@ package com.sparta.starstagram.constans;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * 예외,성공,실패에 대한 응답 집합
+ */
 @Getter
 public enum BaseResponseEnum {
     // 공용

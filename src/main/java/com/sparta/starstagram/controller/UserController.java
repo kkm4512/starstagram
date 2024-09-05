@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
     /**
@@ -32,7 +33,7 @@ public class UserController {
      *
      * @author 이태건
      */
-    @GetMapping("/api/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
@@ -44,7 +45,7 @@ public class UserController {
      *
      * @author 이태건
      */
-   @PutMapping("api/user")
+   @PutMapping
    public ResponseEntity<BaseResponseDto> updateUser(@RequestBody UserNewPasswordRequestDto userRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User loginUser = userDetails.getUser();
         BaseResponseEnum responseEnum = userService.updateUser(userRequestDto, loginUser);
@@ -58,21 +59,7 @@ public class UserController {
      *
      * @author tiyu
      */
-    // 포스트맨 테스트 URL = http://localhost:8080/api/user/signup?email=test@naver.com&password=123&username=test
-//    @PostMapping("/api/user/signup")
-//    public void registerUser(@RequestBody @Valid UserRequestDto requestDto, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            Map<String, String> errors = new HashMap<>();
-//
-//            for (FieldError error : bindingResult.getFieldErrors()) {
-//                errors.put(error.getField(), error.getDefaultMessage());
-//            }
-//
-//            throw new UserPasswordException(BaseResponseEnum.USER_PASSWORD_FORMAT);
-//        }
-//        userService.registerUser(requestDto);
-//    }
-    @PostMapping("/api/user/signup")
+    @PostMapping("/signup")
     public ResponseEntity<BaseResponseDto> registerUser(@RequestBody @Valid UserRequestDto requestDto, BindingResult bindingResult) {
         try {
             userService.registerUser(requestDto, bindingResult);
@@ -89,7 +76,7 @@ public class UserController {
      *
      * @author tiyu
      */
-    @DeleteMapping("/api/user/unregister")
+    @DeleteMapping("/unregister")
     public ResponseEntity<BaseResponseDto> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody UserDeleteRequest request) {
         User user = userDetails.getUser();
         try {

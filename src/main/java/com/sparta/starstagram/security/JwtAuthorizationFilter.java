@@ -1,6 +1,7 @@
 package com.sparta.starstagram.security;
 
 import com.sparta.starstagram.constans.BaseResponseEnum;
+import com.sparta.starstagram.exception.BaseException;
 import com.sparta.starstagram.exception.JwtTokenExceptionHandler;
 import com.sparta.starstagram.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -21,7 +22,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Order(0)
+
+/**
+ * 인가처리 필터
+ */
+@Order(2)
 @Slf4j(topic = "JwtAuthorizationFilter")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -31,16 +36,24 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain fc) throws ServletException, IOException {
         log.info("JWT 인가 로직 시작");
+        String reqURL = req.getRequestURI();
         try {
+            // jwt가 있다면 -> 로그인처리가 됐다는뜻
             String jwt = jwtUtil.resolveToken(req);
             if (StringUtils.hasText(jwt)) {
                 jwtUtil.validateToken(jwt);
                 Claims claims = jwtUtil.getUserInfoFromToken(jwt);
                 setAuthentication(claims.getSubject());
+            } else {
+                // 로그인,회원가입 경로가 아니고 jwt가 없다면
+                if (!reqURL.equals("/api/user/signup") && !reqURL.equals("/api/user/login") && !StringUtils.hasText(jwt)) {
+                    BaseException e = new JwtTokenExceptionHandler(BaseResponseEnum.JWT_NOT_FOUND);
+                    throw e;
+                }
             }
+
         } catch (Exception e) {
             log.error(e.getMessage());
-            req.setAttribute("exception", e);
             throw e;
         }
         fc.doFilter(req, res);
