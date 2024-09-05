@@ -3,6 +3,7 @@ package com.sparta.starstagram.service;
 import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.Follow;
 import com.sparta.starstagram.entity.User;
+import com.sparta.starstagram.exception.HandleFollowException;
 import com.sparta.starstagram.exception.HandleNotFoundException;
 import com.sparta.starstagram.repository.FollowRepository;
 import com.sparta.starstagram.repository.UserRepository;
@@ -35,7 +36,7 @@ public class FollowService {
             // 이미 팔로우되어있는지 확인하는 로직
             Follow existingFollow = followRepository.findByUserAndFollow(loginUser, follow);
             if (existingFollow != null) {
-                return BaseResponseEnum.ALREADY_FOLLOW;
+                throw new HandleFollowException(BaseResponseEnum.ALREADY_FOLLOW);
             }
 
             // 새로운 팔로우 관계 생성
@@ -44,7 +45,7 @@ public class FollowService {
 
             return BaseResponseEnum.FOLLOW_SUCCESS;  // 성공 시
         } catch (Exception e) {
-            return BaseResponseEnum.FOLLOW_FAIL;  // 실패 시
+            throw new HandleFollowException(BaseResponseEnum.FOLLOW_FAIL);  // 실패 시
         }
     }
 
