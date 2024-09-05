@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
 
     private final FollowService followService;
-
-
     /**
      * 팔로우 추가 API
      *

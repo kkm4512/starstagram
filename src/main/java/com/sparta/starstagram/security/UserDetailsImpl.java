@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * UserDetailsServiceImpl에서 처리된 User의 정보가 이쪽으로 옴
+ */
 public class UserDetailsImpl implements UserDetails {
     private final User user;
 

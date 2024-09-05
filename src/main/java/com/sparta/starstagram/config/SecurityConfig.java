@@ -3,6 +3,7 @@ package com.sparta.starstagram.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.starstagram.security.JwtAuthenticationFilter;
 import com.sparta.starstagram.security.JwtAuthorizationFilter;
+import com.sparta.starstagram.security.ServletFilterExceptionHandler;
 import com.sparta.starstagram.security.UserDetailsServiceImpl;
 import com.sparta.starstagram.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public ServletFilterExceptionHandler servletFilterExceptionHandler() {
+        return new ServletFilterExceptionHandler(objectMapper);
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         //CSRF 설정
         http.csrf(AbstractHttpConfigurer::disable);
@@ -77,6 +83,7 @@ public class SecurityConfig {
         http.exceptionHandling(handler -> handler.authenticationEntryPoint(entryPoint));
 
         //필터관리
+        http.addFilterBefore(servletFilterExceptionHandler(), JwtAuthenticationFilter.class );
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

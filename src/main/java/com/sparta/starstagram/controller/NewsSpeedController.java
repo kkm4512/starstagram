@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/newsSpeed")
+@RequestMapping("/api/newsSpeeds")
 @RequiredArgsConstructor
 public class NewsSpeedController {
     private final NewsSpeedService newsSpeedService;

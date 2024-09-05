@@ -1,5 +1,8 @@
 package com.sparta.starstagram.constans;
 
+/**
+ * 유저 권한 상수 집합
+ */
 public enum UserRoleEnum {
     USER(Authority.USER);
 

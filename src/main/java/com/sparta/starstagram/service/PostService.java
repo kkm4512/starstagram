@@ -85,6 +85,14 @@ public class PostService {
         return new ResponsePostDto(board);
     }
 
+    /**
+     * 로그인한 사용자와 + 친구의 게시글들만 가져옴 작성일기준 내림차순으로 가져옴
+     *
+     * @param page 가져올 페이지 (디폴트는 1페이지)
+     * @param size 가져올 게시글 갯수 (디폴트는 10페이지)
+     * @return Page<ResponsePostDto> N page, N size의 post들을 반환
+     *
+     */
     public Page<ResponsePostDto> getPostPage(int page, int size, User user) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> postList = pageNavigateRepository.findPostsByUserAndUserFollows(user,pageable);
