@@ -8,29 +8,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Friend {
+public class Follow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userFriendId;
+    private Long userFollowId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "friend_id")
-    private User friend;
+    @JoinColumn(name = "follow_id")
+    private User follow;
 
 
-//    public void addRelation(User loginUser, User friend) {
-//        this.user = loginUser;
-//        this.friend = friend;
-//    }
-
-    public Friend(User loginUser, User friend) {
+    public Follow(User loginUser, User follow) {
         this.user = loginUser;
-        this.friend = friend;
+        this.follow = follow;
     }
 
 }
