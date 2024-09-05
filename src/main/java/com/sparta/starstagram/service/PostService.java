@@ -87,7 +87,7 @@ public class PostService {
 
     public Page<ResponsePostDto> getPostPage(int page, int size, User user) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Post> postList = pageNavigateRepository.findPostsByUserAndUserFriends(user,pageable);
+        Page<Post> postList = pageNavigateRepository.findPostsByUserAndUserFollows(user,pageable);
         return postList.map(ResponsePostDto::new);
     }
 }

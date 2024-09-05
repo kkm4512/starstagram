@@ -1,11 +1,11 @@
 package com.sparta.starstagram;
 
-import com.sparta.starstagram.entity.Friend;
+import com.sparta.starstagram.entity.Follow;
 import com.sparta.starstagram.entity.Post;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.model.post.RequestPostDto;
 import com.sparta.starstagram.model.user.UserRequestDto;
-import com.sparta.starstagram.repository.FriendRepository;
+import com.sparta.starstagram.repository.FollowRepository;
 import com.sparta.starstagram.repository.PostRepository;
 import com.sparta.starstagram.repository.UserRepository;
 import com.sparta.starstagram.util.UtilFind;
@@ -22,7 +22,7 @@ public class InitData {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    FriendRepository friendRepository;
+    FollowRepository followRepository;
     @Autowired
     PostRepository postRepository;
     @Autowired
@@ -55,8 +55,8 @@ public class InitData {
             for ( long j=1; j<=randomNumber; j++ ) {
                 if (i == j ) continue; // 자기 자신이, 자기 자신을 팔로우는 못하기때문에 continue;
                 User follower = utilFind.userFindById(j);                 // j번째 유저 찾기 (팔로우 신청 당할 사람)
-                Friend friend = new Friend(following, follower); // 연관관계 설정
-                friendRepository.save(friend);
+                Follow follow = new Follow(following, follower); // 연관관계 설정
+                followRepository.save(follow);
             }
         }
 

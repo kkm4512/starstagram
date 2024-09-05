@@ -4,7 +4,7 @@ import com.sparta.starstagram.constans.BaseResponseEnum;
 import com.sparta.starstagram.entity.User;
 import com.sparta.starstagram.model.BaseResponseDto;
 import com.sparta.starstagram.security.UserDetailsImpl;
-import com.sparta.starstagram.service.FriendService;
+import com.sparta.starstagram.service.FollowService;
 import com.sparta.starstagram.util.UtilResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/otherUsers/{friendId}")
-public class FriendController {
+@RequestMapping("/api/otherUsers/{followId}")
+public class FollowController {
 
-    private final FriendService friendService;
+    private final FollowService followService;
 
 
     /**
@@ -25,10 +25,10 @@ public class FriendController {
      * @author 황윤서
      */
     @PostMapping
-    public ResponseEntity<BaseResponseDto> saveFriend(@PathVariable Long friendId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<BaseResponseDto> addFollow(@PathVariable Long followId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User loginUser = userDetails.getUser();
 
-        BaseResponseEnum responseEnum = friendService.saveFriend(friendId, loginUser);
+        BaseResponseEnum responseEnum = followService.addFollow(followId, loginUser);
 
         return UtilResponse.getResponseEntity(responseEnum);
     }
@@ -39,8 +39,8 @@ public class FriendController {
      * @author 황윤서
      */
     @DeleteMapping
-    public ResponseEntity<BaseResponseDto> deleteFriend(@PathVariable("friendId") Long friendId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        BaseResponseEnum responseEnum = friendService.deleteFriend(friendId, userDetails.getUser());
+    public ResponseEntity<BaseResponseDto> removeFollow(@PathVariable("followId") Long followId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        BaseResponseEnum responseEnum = followService.removeFollow(followId, userDetails.getUser());
         return UtilResponse.getResponseEntity(responseEnum);
     }
 }

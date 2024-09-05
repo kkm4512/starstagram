@@ -25,7 +25,7 @@ public class NewsSpeedService {
      */
     public Page<ResponsePostDto> getNewsSpeedPostPage(int page, int size, User loginUser) {
         Pageable pageable = PageRequest.of(page,size);
-        Page<Post> postList = pageNavigateRepository.findPostsByUserFriends(loginUser,pageable);
+        Page<Post> postList = pageNavigateRepository.findPostsByUserFollows(loginUser,pageable);
         return postList.map(ResponsePostDto::new);
     }
 }

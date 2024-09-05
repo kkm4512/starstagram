@@ -34,7 +34,7 @@ public enum BaseResponseEnum {
     FOLLOW_DELETE_SUCCESS(true,HttpStatus.OK.value(), "팔로우 삭제에 성공 하였습니다"),
     FOLlOW_DELETE_FAIL(true,HttpStatus.BAD_REQUEST.value(), "팔로우 삭제에 실패 하였습니다"),
     FOLLOW_FRIEND_NOT_FOUND(true, HttpStatus.NOT_FOUND.value(), "팔로우 삭제할 친구가 없습니다"),
-    ALREADY_FRIEND(true, HttpStatus.CONFLICT.value(), "이미 팔로우 추가되어 있습니다"),
+    ALREADY_FOLLOW(true, HttpStatus.CONFLICT.value(), "이미 팔로우 추가되어 있습니다"),
 
 
     // POST
