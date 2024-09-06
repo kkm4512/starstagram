@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -19,6 +22,13 @@ public class User extends TimeStamp {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRoleEnum role = UserRoleEnum.USER;
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private final List<Post> PostList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private final List<Follow> followList = new ArrayList<>();
 
 
     public User(String email, String username, String encodedPassword) {
